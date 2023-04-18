@@ -1,5 +1,5 @@
 import { Image, StyleSheet, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import Feed from "./Feed";
 import Leave from "./Leave";
