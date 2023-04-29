@@ -2,12 +2,20 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { arrowRight_64 } from "../../../assets/icons";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../redux/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut, selectUser } from "../../redux/auth/authSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Account = () => {
 	const insets = useSafeAreaInsets();
 	const user = useSelector(selectUser);
+	const dispatch = useDispatch();
+	const handleLogout = async () => {
+		try {
+			dispatch(logOut());
+			await AsyncStorage.clear();
+		} catch (error) {}
+	};
 	return (
 		<View
 			style={{
@@ -159,6 +167,7 @@ const Account = () => {
 					left: 0,
 				}}>
 				<TouchableOpacity
+					onPress={handleLogout}
 					style={{
 						padding: 15,
 						marginHorizontal: 25,

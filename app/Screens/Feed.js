@@ -128,7 +128,6 @@ const Feed = () => {
 
 			<View style={{ paddingVertical: 40, paddingHorizontal: 20, gap: 40 }}>
 				<TouchableOpacity
-					onPress={handleCheckIn}
 					style={{
 						backgroundColor: "dodgerblue",
 						padding: 20,
@@ -142,7 +141,6 @@ const Feed = () => {
 					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					onPress={handleCheckOut}
 					style={{
 						backgroundColor: "dodgerblue",
 						padding: 20,
