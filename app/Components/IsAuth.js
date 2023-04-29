@@ -21,7 +21,7 @@ const IsAuth = ({ children }) => {
 				};
 
 				const res = await axios.get(
-					`http://10.0.2.2:3000/api/refresh`,
+					`https://employee-backend-production.up.railway.app/api/refresh`,
 					auth,
 				);
 				if (!res) {

@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Location from "expo-location";
 import { arrowDown_128, arrowUp_128 } from "../../assets/icons";
@@ -12,6 +12,7 @@ const Feed = () => {
 	const insets = useSafeAreaInsets();
 	const user = useSelector(selectUser);
 	const token = useSelector(selectToken);
+	const [errorMsg, setErrorMsg] = useState(null);
 
 	// const locations = useSelector(selectLocationDetails);
 	const dispatch = useDispatch();
@@ -32,13 +33,6 @@ const Feed = () => {
 				latitude: location.coords.latitude,
 				longitude: location.coords.longitude,
 			});
-
-			// dispatch(
-			// 	setCurrentLocation({
-			// 		coords: location?.coords,
-			// 		region: regionFound[0],
-			// 	}),
-			// );
 		})();
 	}, []);
 

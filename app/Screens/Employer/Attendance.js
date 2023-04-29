@@ -13,7 +13,9 @@ const Attendance = () => {
 
 	const getUsers = async () => {
 		try {
-			const users = await axios.get(`http://10.0.2.2:3000/api/users`);
+			const users = await axios.get(
+				`https://employee-backend-production.up.railway.app/api/users`,
+			);
 			setUsers(users.data.users);
 		} catch (error) {
 			console.log("erorr: ", error);

@@ -22,9 +22,12 @@ const Leave = () => {
 
 	const sendLeave = async () => {
 		try {
-			await axios.post(`http://10.0.2.2:3000/api/leave`, {
-				item: leaveTypeData,
-			});
+			await axios.post(
+				`https://employee-backend-production.up.railway.app/api/leave`,
+				{
+					item: leaveTypeData,
+				},
+			);
 
 			setLeaveSent(true);
 		} catch (error) {
