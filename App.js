@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import CreateTask from "./app/Screens/CreateTask";
 import EmployerHome from "./app/Screens/Employer/EmployerHome";
 import Home from "./app/Screens/Home";
@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 	// account = 'Employer' | 'UI Designer' | etc
-	const [accountType, setAccountType] = useState("UI Designer");
+	const [accountType, setAccountType] = useState("Employer");
 	return (
 		<View style={styles.container}>
 			<NavigationContainer>
