@@ -2,9 +2,28 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { arrowRight_64 } from "../../assets/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut, selectToken, selectUser } from "../redux/auth/authSlice";
+import { useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Account = () => {
+const Account = ({ navigation }) => {
 	const insets = useSafeAreaInsets();
+	const dispatch = useDispatch();
+	const user = useSelector(selectUser);
+	const token = useSelector(selectToken);
+	useEffect(() => {
+		if (!token) navigation.navigate("Login");
+	}, [token]);
+
+	const logout = async () => {
+		try {
+			dispatch(logOut());
+			await AsyncStorage.clear();
+		} catch (error) {
+			console.log("account: ", error);
+		}
+	};
 
 	return (
 		<View
@@ -55,9 +74,9 @@ const Account = () => {
 				{/* text */}
 				<View>
 					<Text style={{ fontSize: 18, fontWeight: 500 }}>
-						Michael Angelo
+						{user?.name}
 					</Text>
-					<Text style={{ fontSize: 14 }}>UI Designer</Text>
+					<Text style={{ fontSize: 14 }}>{user?.field}</Text>
 				</View>
 			</View>
 
@@ -79,7 +98,7 @@ const Account = () => {
 					</Text>
 					<Image
 						source={arrowRight_64}
-						style={{ width: 24, height: 24, tintColor: "#dddddd" }}
+						style={{ width: 20, height: 20, tintColor: "#dddddd" }}
 					/>
 				</TouchableOpacity>
 				{/* full name  */}
@@ -99,7 +118,7 @@ const Account = () => {
 					</Text>
 					<Image
 						source={arrowRight_64}
-						style={{ width: 24, height: 24, tintColor: "#dddddd" }}
+						style={{ width: 20, height: 20, tintColor: "#dddddd" }}
 					/>
 				</TouchableOpacity>
 
@@ -120,7 +139,7 @@ const Account = () => {
 					</Text>
 					<Image
 						source={arrowRight_64}
-						style={{ width: 24, height: 24, tintColor: "#dddddd" }}
+						style={{ width: 20, height: 20, tintColor: "#dddddd" }}
 					/>
 				</TouchableOpacity>
 
@@ -141,7 +160,7 @@ const Account = () => {
 					</Text>
 					<Image
 						source={arrowRight_64}
-						style={{ width: 24, height: 24, tintColor: "#dddddd" }}
+						style={{ width: 20, height: 20, tintColor: "#dddddd" }}
 					/>
 				</TouchableOpacity>
 			</View>
@@ -157,6 +176,7 @@ const Account = () => {
 					left: 0,
 				}}>
 				<TouchableOpacity
+					onPress={logout}
 					style={{
 						padding: 15,
 						marginHorizontal: 25,

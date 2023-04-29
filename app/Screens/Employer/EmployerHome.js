@@ -6,12 +6,15 @@ import Attendance from "./Attendance";
 import Account from "./Account";
 import Tasks from "./Tasks";
 import { tick_32, todo_32, userSquare_32 } from "../../../assets/icons";
+import { useEffect } from "react";
+import axios from "axios";
 
 const MaterialTabs = createMaterialTopTabNavigator();
 
 const EmployerHome = () => {
 	const insets = useSafeAreaInsets();
 	// const [searchUser, setSearchUser] = useState("");s
+
 	return (
 		<View style={{ flex: 1 }}>
 			<MaterialTabs.Navigator

@@ -1,10 +1,47 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as Location from "expo-location";
 import { arrowDown_128, arrowUp_128 } from "../../assets/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { useCheckInMutation } from "../redux/auth/checkIn";
+import { useCheckOutMutation } from "../redux/auth/checkOut";
+import { selectToken, selectUser } from "../redux/auth/authSlice";
 
 const Feed = () => {
 	const insets = useSafeAreaInsets();
+	const user = useSelector(selectUser);
+	const token = useSelector(selectToken);
+
+	// const locations = useSelector(selectLocationDetails);
+	const dispatch = useDispatch();
+
+	const [checkIn, { loading }] = useCheckInMutation();
+	const [checkOut] = useCheckOutMutation();
+
+	useEffect(() => {
+		(async () => {
+			let { status } = await Location.requestForegroundPermissionsAsync();
+			if (status !== "granted") {
+				setErrorMsg("Permission to access location was denied");
+				return;
+			}
+
+			let location = await Location.getCurrentPositionAsync({});
+			let regionFound = await Location.reverseGeocodeAsync({
+				latitude: location.coords.latitude,
+				longitude: location.coords.longitude,
+			});
+
+			// dispatch(
+			// 	setCurrentLocation({
+			// 		coords: location?.coords,
+			// 		region: regionFound[0],
+			// 	}),
+			// );
+		})();
+	}, []);
+
 	return (
 		<View
 			style={{
@@ -46,8 +83,8 @@ const Feed = () => {
 					}}
 				/>
 				<View>
-					<Text>Michael Angelo</Text>
-					<Text>UI Designer</Text>
+					<Text>{user?.name}</Text>
+					<Text>{user?.field}</Text>
 				</View>
 			</View>
 
@@ -68,7 +105,9 @@ const Feed = () => {
 						style={{ width: 70, height: 70 }}
 					/>
 					<View style={{ justifyContent: "center", alignItems: "center" }}>
-						<Text style={{ fontSize: 18, fontWeight: 600 }}>09:00</Text>
+						<Text style={{ fontSize: 18, fontWeight: 600 }}>
+							{user?.checkIn}
+						</Text>
 						<Text style={{ fontSize: 13, fontWeight: 700 }}>
 							Checked In
 						</Text>
@@ -77,7 +116,9 @@ const Feed = () => {
 				<View style={{ flexDirection: "row", gap: 10 }}>
 					<Image source={arrowUp_128} style={{ width: 70, height: 70 }} />
 					<View style={{ justifyContent: "center", alignItems: "center" }}>
-						<Text style={{ fontSize: 18, fontWeight: 600 }}>5:00</Text>
+						<Text style={{ fontSize: 18, fontWeight: 600 }}>
+							{user?.checkOut}
+						</Text>
 						<Text style={{ fontSize: 13, fontWeight: 700 }}>
 							Checked Out
 						</Text>
@@ -87,6 +128,7 @@ const Feed = () => {
 
 			<View style={{ paddingVertical: 40, paddingHorizontal: 20, gap: 40 }}>
 				<TouchableOpacity
+					onPress={handleCheckIn}
 					style={{
 						backgroundColor: "dodgerblue",
 						padding: 20,
@@ -100,6 +142,7 @@ const Feed = () => {
 					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
+					onPress={handleCheckOut}
 					style={{
 						backgroundColor: "dodgerblue",
 						padding: 20,

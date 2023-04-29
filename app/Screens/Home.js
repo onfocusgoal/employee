@@ -11,11 +11,15 @@ import {
 	todo_32,
 	userSquare_32,
 } from "../../assets/icons";
+import { useSelector } from "react-redux";
+import { selectToken } from "../redux/auth/authSlice";
+import Login from "./Login";
 
 const MaterialTabs = createMaterialTopTabNavigator();
 
 const Home = () => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const token = useSelector(selectToken);
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -79,8 +83,8 @@ const Home = () => {
 					}}
 				/>
 				<MaterialTabs.Screen
-					name="Account"
-					component={Account}
+					name={token ? "Account" : "Login"}
+					component={token ? Account : Login}
 					options={{
 						tabBarIcon: ({ focused }) => (
 							<Image

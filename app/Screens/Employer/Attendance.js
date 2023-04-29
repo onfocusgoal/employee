@@ -1,12 +1,28 @@
 import { StyleSheet, Text, View, TextInput, Image } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { search_64 } from "../../../assets/icons";
 import EmployerHomeCard from "../../Components/EmployerHomeCard";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import axios from "axios";
 
 const Attendance = () => {
 	const insets = useSafeAreaInsets();
 	const [searchUser, setSearchUser] = useState("");
+
+	const [users, setUsers] = useState([]);
+
+	const getUsers = async () => {
+		try {
+			const users = await axios.get(`http://10.0.2.2:3000/api/users`);
+			setUsers(users.data.users);
+		} catch (error) {
+			console.log("erorr: ", error);
+		}
+	};
+
+	useEffect(() => {
+		getUsers();
+	}, []);
 	return (
 		<View
 			style={{
@@ -56,9 +72,17 @@ const Attendance = () => {
 			</View>
 
 			{/* employerhomecards */}
-			<View style={{ padding: 20, flexDirection: "row", gap: 10 }}>
-				<EmployerHomeCard />
-				<EmployerHomeCard />
+			<View
+				style={{
+					padding: 20,
+					flexDirection: "row",
+					gap: 10,
+					flexWrap: "wrap",
+					justifyContent: "space-between",
+				}}>
+				{users?.map((item, index) => (
+					<EmployerHomeCard item={item} key={index} />
+				))}
 			</View>
 		</View>
 	);

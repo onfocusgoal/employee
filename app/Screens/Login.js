@@ -1,5 +1,4 @@
 import {
-	KeyboardAvoidingView,
 	StyleSheet,
 	Text,
 	TextInput,
@@ -7,14 +6,44 @@ import {
 	View,
 } from "react-native";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useLoginMutation } from "../redux/auth/login";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Checkbox from "expo-checkbox";
+import { setCredentials } from "../redux/auth/authSlice";
 
-const Login = () => {
+const Login = ({ navigation }) => {
 	const [loginDetails, setLoginDetails] = useState({
-		username: "",
+		email: "",
 		password: "",
 	});
+	const [remember, setRemember] = useState(false);
+	const [error, setError] = useState(null);
+
+	const dispatch = useDispatch();
+	const [login, { loading }] = useLoginMutation();
+
+	const handleSubmit = async () => {
+		try {
+			const userData = await login({
+				...loginDetails,
+			}).unwrap();
+
+			await AsyncStorage.setItem("token", userData?.accessToken);
+
+			dispatch(
+				setCredentials({
+					...userData,
+				}),
+			);
+			navigation.navigate("Home");
+		} catch (err) {
+			setError(err?.data?.error);
+		}
+	};
+
 	return (
-		<KeyboardAvoidingView style={{ flex: 1 }}>
+		<View style={{ flex: 1 }}>
 			<View
 				style={{
 					padding: 20,
@@ -25,13 +54,18 @@ const Login = () => {
 				}}>
 				<View style={{ width: 150, height: 150 }} />
 				<View style={{ gap: 15 }}>
+					{error && (
+						<Text style={{ textAlign: "center", marginVertical: 15 }}>
+							{error}
+						</Text>
+					)}
 					<TextInput
 						placeholderTextColor="#bbb"
-						value={loginDetails?.username}
+						value={loginDetails?.email}
 						onChangeText={(e) =>
-							setLoginDetails((value) => ({ ...value, username: e }))
+							setLoginDetails((value) => ({ ...value, email: e }))
 						}
-						placeholder="Username"
+						placeholder="Email"
 						style={{
 							paddingVertical: 15,
 							paddingHorizontal: 20,
@@ -45,6 +79,7 @@ const Login = () => {
 						onChangeText={(e) =>
 							setLoginDetails((value) => ({ ...value, password: e }))
 						}
+						secureTextEntry={true}
 						placeholder="Password"
 						style={{
 							paddingVertical: 15,
@@ -53,14 +88,26 @@ const Login = () => {
 							borderRadius: 10,
 						}}
 					/>
-					<View>
+					<TouchableOpacity
+						onPress={() => setRemember(!remember)}
+						style={{
+							flexDirection: "row",
+							gap: 10,
+							alignItems: "center",
+						}}>
 						{/* check box  */}
+						<Checkbox
+							style={{ width: 15, height: 15 }}
+							value={remember}
+							onValueChange={setRemember}
+						/>
 						<Text>Remember Password</Text>
-					</View>
+					</TouchableOpacity>
 				</View>
 
 				<View style={{ gap: 10 }}>
 					<TouchableOpacity
+						onPress={handleSubmit}
 						style={{ backgroundColor: "dodgerblue", borderRadius: 5 }}>
 						<Text
 							style={{
@@ -101,6 +148,7 @@ const Login = () => {
 
 				<View>
 					<TouchableOpacity
+						onPress={() => navigation.navigate("SignUp")}
 						style={{ backgroundColor: "#fff", borderRadius: 5 }}>
 						<Text
 							style={{
@@ -114,7 +162,7 @@ const Login = () => {
 					</TouchableOpacity>
 				</View>
 			</View>
-		</KeyboardAvoidingView>
+		</View>
 	);
 };
 

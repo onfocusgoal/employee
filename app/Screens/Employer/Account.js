@@ -2,9 +2,12 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { arrowRight_64 } from "../../../assets/icons";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/auth/authSlice";
 
 const Account = () => {
 	const insets = useSafeAreaInsets();
+	const user = useSelector(selectUser);
 	return (
 		<View
 			style={{
@@ -54,9 +57,9 @@ const Account = () => {
 				{/* text */}
 				<View>
 					<Text style={{ fontSize: 18, fontWeight: 500 }}>
-						Michael Angelo
+						{user?.name}
 					</Text>
-					<Text style={{ fontSize: 14 }}>UI Designer</Text>
+					<Text style={{ fontSize: 14 }}>{user?.field}</Text>
 				</View>
 			</View>
 

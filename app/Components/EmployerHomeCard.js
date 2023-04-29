@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 import { clock_24 } from "../../assets/icons";
 
-const EmployerHomeCard = () => {
+const EmployerHomeCard = ({ item }) => {
 	return (
 		<View
 			style={{
@@ -12,6 +12,7 @@ const EmployerHomeCard = () => {
 				flex: 1,
 				paddingBottom: 10,
 				borderRadius: 5,
+				maxWidth: 180,
 			}}>
 			<View
 				style={{
@@ -19,7 +20,7 @@ const EmployerHomeCard = () => {
 					backgroundColor: "#bbbbbb",
 				}}
 			/>
-			<Text style={{ paddingHorizontal: 10 }}>John</Text>
+			<Text style={{ paddingHorizontal: 10 }}>{item?.name}</Text>
 			<View
 				style={{
 					flexDirection: "row",
