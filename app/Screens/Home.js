@@ -1,5 +1,5 @@
 import { Image, StyleSheet, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import Feed from "./Feed";
 import Leave from "./Leave";
@@ -17,9 +17,12 @@ import Login from "./Login";
 
 const MaterialTabs = createMaterialTopTabNavigator();
 
-const Home = () => {
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+const Home = ({ navigation }) => {
 	const token = useSelector(selectToken);
+
+	useEffect(() => {
+		if (!token) navigation.navigate("Login");
+	}, [token]);
 
 	return (
 		<View style={{ flex: 1 }}>
